@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Pickleball Labeler</title>
+
+
+<style>
+
+button {
+    font-size: 25px;
+    padding: 20px;
+    margin: 20px;
+}
+
+#time {
+    font-size: 30px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<h1>Pickleball Video Labeler</h1>
+
+
+<video 
+id="video"
+width="900"
+controls
+data-start-time="{{ start_time }}">
+
+    <source src="/static/video.mp4" type="video/mp4">
+
+</video>
+
+
+<h2 id="time">
+0.0 seconds
+</h2>
+
+
+<button onclick="logPlay()">
+BALL IN PLAY
+</button>
+
+
+<button onclick="logStop()">
+NOT IN PLAY
+</button>
+
+
+
+<script>
+
+
+const video = document.getElementById("video");
+
+const time = document.getElementById("time");
+
+
+// Resume from last timestamp
+let startTime = parseFloat(
+    video.dataset.startTime
+);
+
+
+video.addEventListener(
+"loadedmetadata",
+()=>{
+
+    video.currentTime = startTime;
+
+    video.pause();
+
+});
+
+
+
+// Display timestamp
+
+video.addEventListener(
+"timeupdate",
+()=>{
+
+    time.innerHTML =
+        video.currentTime.toFixed(2)
+        + " seconds";
+
+});
+
+
+
+
+// Send annotation
+
+function send(state){
+
+
+    fetch(
+        "/log",
+        {
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+            timestamp:
+                video.currentTime,
+
+            state:state
+
+        })
+
+    });
+
+
+}
+
+
+
+
+// Ball in play button
+
+function logPlay(){
+
+    send("IN_PLAY");
+
+    video.play();
+
+}
+
+
+
+// Not in play button
+
+function logStop(){
+
+    send("NOT_IN_PLAY");
+
+    video.pause();
+
+}
+
+
+
+
+
+// Keyboard shortcuts
+//
+// Space = pause/play
+// I = in play
+// O = not in play
+
+
+document.addEventListener(
+"keydown",
+(event)=>{
+
+
+    if(event.code === "Space"){
+
+        event.preventDefault();
+
+        if(video.paused){
+
+            video.play();
+
+        }
+        else{
+
+            video.pause();
+
+        }
+
+    }
+
+
+
+    if(event.key.toLowerCase() === "i"){
+
+        logPlay();
+
+    }
+
+
+
+    if(event.key.toLowerCase() === "o"){
+
+        logStop();
+
+    }
+
+
+});
+
+
+
+</script>
+
+
+</body>
+
+</html>

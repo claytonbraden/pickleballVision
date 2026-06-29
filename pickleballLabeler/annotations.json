@@ -1,0 +1,46 @@
+[
+    {
+        "timestamp": 2.392005,
+        "state": "IN_PLAY"
+    },
+    {
+        "timestamp": 11.009607,
+        "state": "NOT_IN_PLAY"
+    },
+    {
+        "timestamp": 19.00784,
+        "state": "IN_PLAY"
+    },
+    {
+        "timestamp": 25.075663,
+        "state": "NOT_IN_PLAY"
+    },
+    {
+        "timestamp": 34.916037,
+        "state": "IN_PLAY"
+    },
+    {
+        "timestamp": 45.875658,
+        "state": "IN_PLAY"
+    },
+    {
+        "timestamp": 47.081852,
+        "state": "NOT_IN_PLAY"
+    },
+    {
+        "timestamp": 54.521983,
+        "state": "IN_PLAY"
+    },
+    {
+        "timestamp": 59.941334,
+        "state": "NOT_IN_PLAY"
+    },
+    {
+        "timestamp": 59.941719,
+        "state": "IN_PLAY"
+    },
+    {
+        "timestamp": 63.74728,
+        "state": "NOT_IN_PLAY"
+    }
+]
