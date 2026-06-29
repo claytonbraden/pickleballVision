@@ -1,0 +1,20 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Videos (generated)
+*.mp4
+*.avi
+*.mov
+
+# YOLO outputs
+runs/
+weights/
+*.pt
+*.pth
+*.onnx
+
+# IDE
+.vscode/
+.idea/

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Clip Labeler</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 40px; }
+    video { width: 100%; max-width: 600px; margin-bottom: 20px; border: 1px solid #ccc; }
+    button { padding: 12px 20px; margin: 10px; font-size: 16px; cursor: pointer; border: none; border-radius: 5px; }
+    input[type="text"] { padding: 8px; font-size: 16px; width: 150px; margin-bottom: 20px; }
+    .btn-1 { background-color: #4CAF50; color: white; }
+    .btn-2 { background-color: #f44336; color: white; }
+    .btn-3 { background-color: #ff9800; color: white; }
+    .btn-4 { background-color: #2196F3; color: white; }
+    .btn-ts { background-color: #555; color: white; }
+    #error { color: red; font-weight: bold; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Label this clip</h1>
+
+  <video id="videoPlayer" controls>
+    <source src="{{ url_for('static', filename='clips/' + clip) }}" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <form id="labelForm" method="POST">
+    <input type="hidden" name="clip" value="{{ clip }}">
+    
+    <div id="error"></div>
+
+    <!-- Timestamp input -->
+    <div>
+      <label for="timestamp">Point won at time (seconds): </label>
+      <input type="text" name="timestamp" id="timestamp" placeholder="0.0">
+      <button type="button" class="btn-ts" onclick="setTimestamp()">Use current time</button>
+    </div>
+
+    <!-- Label buttons -->
+    <div>
+      <button type="button" class="btn-1" onclick="submitLabel('A wins (Johns)')">1 - A wins (Johns)</button>
+      <button type="button" class="btn-2" onclick="submitLabel('B wins (not Johns)')">2 - B wins (not Johns)</button>
+    </div>
+    <div>
+      <button type="submit" name="label" value="No win but playing" class="btn-3">3 - No win but playing</button>
+      <button type="submit" name="label" value="No play" class="btn-4">4 - No play</button>
+    </div>
+  </form>
+
+  <script>
+    const video = document.getElementById("videoPlayer");
+    const tsInput = document.getElementById("timestamp");
+    const form = document.getElementById("labelForm");
+    const errorDiv = document.getElementById("error");
+
+    // Auto-fill timestamp
+    function setTimestamp() {
+      tsInput.value = video.currentTime.toFixed(2);
+    }
+
+    // Submit for A/B buttons with validation
+    function submitLabel(label) {
+      // Require timestamp for A/B wins
+      if ((label === "A wins (Johns)" || label === "B wins (not Johns)") && tsInput.value.trim() === "") {
+        errorDiv.textContent = "⚠ Please enter the time of point won before labeling!";
+        return; // stop submission
+      }
+
+      // Clear previous error
+      errorDiv.textContent = "";
+
+      // Remove any previous hidden label input to avoid duplicates
+      const oldInput = form.querySelector("input[name='label']");
+      if (oldInput) oldInput.remove();
+
+      // Create hidden input with label
+      const hidden = document.createElement("input");
+      hidden.type = "hidden";
+      hidden.name = "label";
+      hidden.value = label;
+      form.appendChild(hidden);
+
+      // Submit form
+      form.submit();
+    }
+  </script>
+</body>
+</html>
